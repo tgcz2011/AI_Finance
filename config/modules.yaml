@@ -1,0 +1,14 @@
+modules:
+  account: true
+  trade_validator: true
+  trade_executor: true
+  risk: true
+  data_fetcher: true
+  ai_adapter: true
+  loan: true
+  scheduler: true
+  contest: true
+  snapshot: true
+  report: true
+  logging: true
+  version_control: false

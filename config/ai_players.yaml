@@ -1,0 +1,29 @@
+- id: ai_player_001
+  name: "GPT-4 激进型"
+  model_endpoint: "https://api.openai.com/v1"
+  model_name: "gpt-4"
+  api_key_env: "OPENAI_API_KEY"
+  model_params:
+    temperature: 0.7
+    max_tokens: 2048
+  decision_frequency_minutes: 5
+
+- id: ai_player_002
+  name: "Claude 稳健型"
+  model_endpoint: "https://api.anthropic.com/v1"
+  model_name: "claude-3-sonnet"
+  api_key_env: "ANTHROPIC_API_KEY"
+  model_params:
+    temperature: 0.3
+    max_tokens: 2048
+  decision_frequency_minutes: 5
+
+- id: ai_player_003
+  name: "本地模型保守型"
+  model_endpoint: "http://localhost:11434/v1"
+  model_name: "qwen2.5:7b"
+  api_key_env: null
+  model_params:
+    temperature: 0.2
+    max_tokens: 2048
+  decision_frequency_minutes: 10

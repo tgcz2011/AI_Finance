@@ -1,0 +1,75 @@
+initial_capital_cny: "1000000"
+simulation_mode: REALTIME
+decimal_precision: 8
+spread_bps: "0.004"
+
+fee:
+  a_stock_commission_bps: "0.0003"
+  a_stock_commission_min: "5"
+  a_stock_stamp_tax_bps: "0.001"
+  us_stock_commission_bps: "0.005"
+  crypto_taker_fee_bps: "0.001"
+  crypto_maker_fee_bps: "0.001"
+  exchange_fee_min_bps: "0.001"
+  exchange_fee_max_bps: "0.004"
+  slippage_bps: "0.0005"
+
+loan:
+  daily_interest_rate: "0.0005"
+  max_loan_ratio: "0.5"
+  collateral_warning_ratio: "1.2"
+  collateral_liquidation_ratio: "1.1"
+
+risk:
+  drawdown_circuit_breaker_threshold: "0.3"
+  concentration_limit: "0.4"
+  daily_loss_limit_ratio: "0.05"
+  abnormal_frequency_per_minute: 20
+  extreme_market_index_drop: "0.05"
+  extreme_market_crypto_drop: "0.1"
+
+data_fetcher:
+  cache_ttl_realtime_seconds: 60
+  rate_limit_initial_delay: "1"
+  rate_limit_max_delay: "60"
+  rate_limit_backoff_factor: 2
+  rate_limit_max_retries: 10
+  cross_source_deviation_threshold: "0.02"
+  fetch_timeout_seconds: 10
+  free_source_priority: true
+
+ai:
+  decision_timeout_seconds: 30
+  local_model_priority: true
+  context_compress:
+    max_tokens: 4096
+    priority_market_state: 4
+    priority_recent_trades: 3
+    priority_historical_summary: 2
+    priority_auxiliary: 1
+
+snapshot:
+  interval_seconds: 3600
+  write_timeout_seconds: 5
+
+git:
+  enabled: false
+  auto_commit_on_day_end: true
+  auto_commit_on_round_end: true
+  auto_commit_on_contest_end: true
+  auto_push: false
+
+modules:
+  account: true
+  trade_validator: true
+  trade_executor: true
+  risk: true
+  data_fetcher: true
+  ai_adapter: true
+  loan: true
+  scheduler: true
+  contest: true
+  snapshot: true
+  report: true
+  logging: true
+  version_control: false

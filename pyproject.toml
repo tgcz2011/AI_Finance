@@ -1,0 +1,96 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-finance-simulator"
+version = "0.1.0"
+description = "Multi-market multi-AI parallel automated simulated investment competition system"
+requires-python = ">=3.11"
+dependencies = [
+    "PyQt6>=6.6.0",
+    "qasync>=0.27.1",
+    "SQLAlchemy[asyncio]>=2.0.0",
+    "aiosqlite>=0.20.0",
+    "alembic>=1.13.0",
+    "pydantic>=2.5.0",
+    "PyYAML>=6.0.1",
+    "httpx>=0.27.0",
+    "openai>=1.12.0",
+    "akshare>=1.12.0",
+    "yfinance>=0.2.36",
+    "matplotlib>=3.8.0",
+    "pyqtgraph>=0.13.7",
+    "cryptography>=42.0.0",
+    "GitPython>=3.1.41",
+    "PyGithub>=2.3.0",
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "pytest-qt>=4.4.0",
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+]
+
+[project.scripts]
+ai-finance = "src.main:main"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F", "I", "N", "UP", "B", "A", "C4", "DTZ", "EM",
+    "ISC", "ICN", "PIE", "PT", "RET", "RSE", "SIM", "TCH", "ARG",
+    "PTH", "PD", "PL", "TRY", "RUF",
+]
+ignore = ["PLR0913", "TRY003"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = [
+    "akshare.*", "yfinance.*", "pyqtgraph.*", "qasync.*",
+    "git.*", "github.*", "PyQt6.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short"
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow tests",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["tests/*", "*/migrations/*"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
