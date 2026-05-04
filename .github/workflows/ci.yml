@@ -39,7 +39,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - run: pip install -e ".[dev]"
-      - run: pytest tests/unit -v --cov=src --cov-report=term-missing --cov-report=xml -m unit
+      - run: pytest tests/unit -v --cov=src --cov-report=term-missing --cov-report=xml -p no:qt
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -56,7 +56,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
-      - run: pytest tests/integration -v -m integration
+      - run: pytest tests/integration -v -p no:qt
 
   coverage-gate:
     name: Coverage Gate (≥80%)
@@ -68,4 +68,4 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
-      - run: pytest tests/unit --cov=src --cov-report=term-missing --cov-fail-under=80 -q
+      - run: pytest tests/unit --cov=src --cov-report=term-missing --cov-fail-under=80 -q -p no:qt
