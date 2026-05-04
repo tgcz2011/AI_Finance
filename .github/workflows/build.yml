@@ -32,6 +32,10 @@ jobs:
           python-version: '3.11'
           cache: pip
 
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libopengl0
+
       - name: Install dependencies
         run: |
           pip install -e ".[dev]"
@@ -51,6 +55,18 @@ jobs:
             --hidden-import cryptography.fernet `
             --hidden-import pydantic `
             --hidden-import yaml `
+            --hidden-import openai `
+            --hidden-import httpx `
+            --hidden-import akshare `
+            --hidden-import yfinance `
+            --hidden-import matplotlib `
+            --hidden-import pyqtgraph `
+            --hidden-import qasync `
+            --hidden-import GitPython `
+            --hidden-import github `
+            --hidden-import PyQt6.QtWidgets `
+            --hidden-import PyQt6.QtCore `
+            --hidden-import PyQt6.QtGui `
             src/main.py
 
       - name: Build with PyInstaller (macOS/Linux)
@@ -64,6 +80,18 @@ jobs:
             --hidden-import cryptography.fernet \
             --hidden-import pydantic \
             --hidden-import yaml \
+            --hidden-import openai \
+            --hidden-import httpx \
+            --hidden-import akshare \
+            --hidden-import yfinance \
+            --hidden-import matplotlib \
+            --hidden-import pyqtgraph \
+            --hidden-import qasync \
+            --hidden-import GitPython \
+            --hidden-import github \
+            --hidden-import PyQt6.QtWidgets \
+            --hidden-import PyQt6.QtCore \
+            --hidden-import PyQt6.QtGui \
             src/main.py
 
       - name: Upload artifact
@@ -85,23 +113,14 @@ jobs:
 
       - name: Create release archives
         run: |
+          mkdir -p release
           cd artifacts
-          mkdir -p ../release
           for dir in */; do
             name="${dir%/}"
-            if [ "$RUNNER_OS" = "Windows" ] || echo "$name" | grep -q "Windows"; then
-              cd "$dir" && zip -r "../../release/${name}.zip" . && cd ..
-            else
-              tar -czf "../release/${name}.tar.gz" -C "$dir" .
-            fi
-          done
-          cd ..
-          for dir in artifacts/*/; do
-            name=$(basename "$dir")
             if echo "$name" | grep -q "Windows"; then
               (cd "$dir" && zip -r "../../release/${name}.zip" .)
             else
-              tar -czf "release/${name}.tar.gz" -C "$dir" .
+              tar -czf "../release/${name}.tar.gz" -C "$dir" .
             fi
           done
 
