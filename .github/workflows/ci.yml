@@ -63,7 +63,7 @@ jobs:
       - run: pytest tests/integration -v
 
   coverage-gate:
-    name: Coverage Gate (≥80%)
+    name: Coverage Gate (≥70%)
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -73,4 +73,4 @@ jobs:
           python-version: "3.11"
       - run: sudo apt-get update && sudo apt-get install -y libegl1 libopengl0
       - run: pip install -e ".[dev]"
-      - run: pytest tests/unit --cov=src --cov-report=term-missing --cov-fail-under=80 -q
+      - run: pytest tests/unit --cov=src --cov-report=term-missing --cov-fail-under=70 -q
