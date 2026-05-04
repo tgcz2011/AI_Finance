@@ -3,12 +3,14 @@ from __future__ import annotations
 from decimal import Decimal
 
 from src.core.account.models import AccountSummary
-from src.core.constants import D, ZERO
-from src.core.risk.rules.base import RiskRule, RiskCheckResult
+from src.core.constants import ZERO, D
+from src.core.risk.rules.base import RiskCheckResult, RiskRule
+
+_CONCENTRATION_DEFAULT_LIMIT = D("0.4")
 
 
 class ConcentrationLimit(RiskRule):
-    def __init__(self, limit: Decimal = D("0.4")) -> None:
+    def __init__(self, limit: Decimal = _CONCENTRATION_DEFAULT_LIMIT) -> None:
         self._limit = limit
 
     @property

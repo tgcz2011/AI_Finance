@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import signal
 import asyncio
 import logging
-from typing import Callable
+import signal
+from collections.abc import Callable
 
-from src.core.types.result import Ok, Err, Result
+from src.core.types.result import Err, Ok, Result
 from src.core.wal.manager import WALManager
 
 logger = logging.getLogger(__name__)

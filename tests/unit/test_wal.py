@@ -1,13 +1,11 @@
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
-from datetime import datetime
+from unittest.mock import MagicMock
 
-from src.core.enums import OperationType, WALStatus
+import pytest
+
+from src.core.types.event_bus import EventBus
+from src.core.wal.integrity import StateIntegrityChecker
 from src.core.wal.manager import WALManager
 from src.core.wal.recovery import SystemRecovery
-from src.core.wal.integrity import StateIntegrityChecker
-from src.core.types.event_bus import EventBus, Event
-from src.infrastructure.storage.models import WALLogORM
 
 
 class TestWALManager:

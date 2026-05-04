@@ -1,16 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from decimal import Decimal
 from typing import Any
 
 from src.core.constants import (
-    D, ZERO,
     CONTEXT_MAX_TOKENS,
+    CONTEXT_PRIORITY_AUXILIARY,
+    CONTEXT_PRIORITY_HISTORICAL_SUMMARY,
     CONTEXT_PRIORITY_MARKET_STATE,
     CONTEXT_PRIORITY_RECENT_TRADES,
-    CONTEXT_PRIORITY_HISTORICAL_SUMMARY,
-    CONTEXT_PRIORITY_AUXILIARY,
 )
 
 

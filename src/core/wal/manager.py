@@ -3,14 +3,13 @@ from __future__ import annotations
 import hashlib
 import json
 from datetime import datetime
-from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.enums import WALStatus, OperationType
-from src.core.types.result import Ok, Err, Result
+from src.core.enums import OperationType, WALStatus
+from src.core.types.result import Err, Ok, Result
 from src.infrastructure.storage.models import WALLogORM
 
 

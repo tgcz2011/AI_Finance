@@ -3,12 +3,15 @@ from __future__ import annotations
 from decimal import Decimal
 
 from src.core.account.models import AccountSummary
-from src.core.constants import D, ZERO
-from src.core.risk.rules.base import RiskRule, RiskCheckResult
+from src.core.constants import ZERO, D
+from src.core.risk.rules.base import RiskCheckResult, RiskRule
+
+_EXTREME_INDEX_DROP = D("0.05")
+_EXTREME_CRYPTO_DROP = D("0.1")
 
 
 class ExtremeMarketCircuitBreaker(RiskRule):
-    def __init__(self, index_drop: Decimal = D("0.05"), crypto_drop: Decimal = D("0.1")) -> None:
+    def __init__(self, index_drop: Decimal = _EXTREME_INDEX_DROP, crypto_drop: Decimal = _EXTREME_CRYPTO_DROP) -> None:
         self._index_drop = index_drop
         self._crypto_drop = crypto_drop
 

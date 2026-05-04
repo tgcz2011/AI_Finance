@@ -3,12 +3,14 @@ from __future__ import annotations
 from decimal import Decimal
 
 from src.core.account.models import AccountSummary
-from src.core.constants import D, ZERO
-from src.core.risk.rules.base import RiskRule, RiskCheckResult
+from src.core.constants import ZERO, D
+from src.core.risk.rules.base import RiskCheckResult, RiskRule
+
+_DRAWDOWN_DEFAULT_THRESHOLD = D("0.3")
 
 
 class DrawdownCircuitBreaker(RiskRule):
-    def __init__(self, threshold: Decimal = D("0.3")) -> None:
+    def __init__(self, threshold: Decimal = _DRAWDOWN_DEFAULT_THRESHOLD) -> None:
         self._threshold = threshold
 
     @property

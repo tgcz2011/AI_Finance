@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from src.core.account.models import AccountSummary
-from src.core.risk.rules.base import RiskRule, RiskCheckResult
+from src.core.risk.rules.base import RiskCheckResult, RiskRule
 
 
 class AbnormalFrequencyDetector(RiskRule):

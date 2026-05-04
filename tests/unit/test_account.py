@@ -1,12 +1,8 @@
 from decimal import Decimal
 
-import pytest
-
 from src.core.account.manager import AccountManager
-from src.core.account.models import Account, Position, AccountSummary
-from src.core.constants import D, ZERO, INITIAL_CAPITAL_CNY
+from src.core.constants import INITIAL_CAPITAL_CNY, ZERO, D
 from src.core.enums import Currency, Market
-from src.core.types.result import Ok, Err
 
 
 class TestAccountManager:

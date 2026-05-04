@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import asyncio
 import inspect
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable
-from weakref import WeakSet
+from typing import Any
 
 
 class EventPriority(Enum):

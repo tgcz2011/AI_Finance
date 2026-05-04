@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import Any
 
 from src.core.account.manager import AccountManager
-from src.core.constants import D, ZERO, INITIAL_CAPITAL_CNY
-from src.core.enums import Currency, ContestRoundType
-from src.core.types.result import Ok, Err, Result
+from src.core.constants import INITIAL_CAPITAL_CNY, ZERO, D
+from src.core.enums import ContestRoundType, Currency
+from src.core.types.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +91,10 @@ class ContestManager:
             if ai_id in self._eliminated:
                 continue
             total_assets = self._account_mgr.get_total_assets_cny(ai_id, market_prices)
-            return_rate = (total_assets - self._initial_capital) / self._initial_capital if self._initial_capital > ZERO else ZERO
+            if self._initial_capital > ZERO:
+                return_rate = (total_assets - self._initial_capital) / self._initial_capital
+            else:
+                return_rate = ZERO
             if total_assets > self._peak_assets.get(ai_id, ZERO):
                 self._peak_assets[ai_id] = total_assets
             entries.append(LeaderboardEntry(

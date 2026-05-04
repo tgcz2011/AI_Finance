@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import Any, Callable
+from typing import Any
 
-from src.infrastructure.module_manager.registry import ModuleRegistry, ModuleDisabledError
+from src.infrastructure.module_manager.registry import ModuleDisabledError, ModuleRegistry
 
 
 class ModuleProxy:
@@ -13,7 +13,7 @@ class ModuleProxy:
 
     def __getattr__(self, name: str) -> Any:
         if not self._registry.is_enabled(self._module_id):
-            raise ModuleDisabledError(f"模块 {self._module_id} 已禁用，无法调用 {name}")
+            raise ModuleDisabledError(f"模块 {self._module_id} 已禁用, 无法调用 {name}")
         if self._real_module is None:
             raise AttributeError(f"Module {self._module_id} has no real implementation")
         return getattr(self._real_module, name)

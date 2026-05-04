@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import Any, Callable
+from typing import Any
 
 from src.business.scheduler.scheduler import SimulatorScheduler
 from src.core.account.manager import AccountManager
-from src.core.constants import D, ZERO
+from src.core.constants import ZERO, D
 from src.core.enums import SimulationMode
 
 logger = logging.getLogger(__name__)
@@ -35,10 +36,7 @@ class BacktestEngine:
         results: dict[str, Any] = {}
 
         while self._current_time < end_date and self._scheduler.is_running:
-            if kline_data:
-                market_prices = self._get_prices_at_time(kline_data, self._current_time)
-            else:
-                market_prices = {}
+            market_prices = self._get_prices_at_time(kline_data, self._current_time) if kline_data else {}
 
             if market_prices:
                 cycle_results = await self._scheduler.decision_cycle(

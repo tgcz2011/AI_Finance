@@ -1,6 +1,7 @@
 import pytest
-from src.core.types.result import Ok, Err, Result
-from src.core.types.event_bus import EventBus, Event, EventPriority
+
+from src.core.types.event_bus import Event, EventBus, EventPriority
+from src.core.types.result import Err, Ok
 
 
 class TestOk:
@@ -91,7 +92,8 @@ class TestEventBus:
     def test_unsubscribe(self):
         bus = EventBus()
         received = []
-        handler = lambda e: received.append(1)
+        def handler(e):
+            return received.append(1)
         bus.subscribe("evt", handler)
         bus.unsubscribe("evt", handler)
         bus.publish(Event(event_type="evt"))

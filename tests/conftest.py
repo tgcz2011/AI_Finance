@@ -5,8 +5,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from src.core.constants import D, INITIAL_CAPITAL_CNY, ZERO
-from src.core.enums import Action, Currency, Market
+from src.core.constants import INITIAL_CAPITAL_CNY, D
 
 
 @pytest.fixture

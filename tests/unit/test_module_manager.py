@@ -1,12 +1,14 @@
-import pytest
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import MagicMock
 
-from src.core.enums import ModuleStatus
-from src.infrastructure.module_manager.registry import (
-    ModuleMeta, ModuleRegistry, ModuleDisabledError,
-    DependencyCheckResult, register_all_modules,
-)
+import pytest
+
 from src.infrastructure.module_manager.proxy import ModuleProxy
+from src.infrastructure.module_manager.registry import (
+    ModuleDisabledError,
+    ModuleMeta,
+    ModuleRegistry,
+    register_all_modules,
+)
 
 
 class TestModuleMeta:

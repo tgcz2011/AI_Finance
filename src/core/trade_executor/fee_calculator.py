@@ -3,14 +3,18 @@ from __future__ import annotations
 from dataclasses import dataclass
 from decimal import Decimal
 
-from src.core.enums import Market, Action, Currency
 from src.core.constants import (
-    D, ZERO,
-    A_STOCK_COMMISSION_BPS, A_STOCK_COMMISSION_MIN, A_STOCK_STAMP_TAX_BPS,
-    US_STOCK_COMMISSION_BPS,
-    CRYPTO_TAKER_FEE_BPS, CRYPTO_MAKER_FEE_BPS,
+    A_STOCK_COMMISSION_BPS,
+    A_STOCK_COMMISSION_MIN,
+    A_STOCK_STAMP_TAX_BPS,
+    CRYPTO_MAKER_FEE_BPS,
+    CRYPTO_TAKER_FEE_BPS,
     DEFAULT_SLIPPAGE_BPS,
+    US_STOCK_COMMISSION_BPS,
+    ZERO,
+    D,
 )
+from src.core.enums import Action, Market
 
 
 @dataclass(frozen=True)
@@ -75,8 +79,7 @@ class SlippageCalculator:
     def calculate_execution_price(self, price: Decimal, action: Action) -> Decimal:
         if action == Action.BUY:
             return (price * (D("1") + self._slippage_bps)).quantize(D("0.00000001"))
-        else:
-            return (price * (D("1") - self._slippage_bps)).quantize(D("0.00000001"))
+        return (price * (D("1") - self._slippage_bps)).quantize(D("0.00000001"))
 
     def calculate_slippage_cost(self, price: Decimal, action: Action, quantity: Decimal) -> Decimal:
         exec_price = self.calculate_execution_price(price, action)

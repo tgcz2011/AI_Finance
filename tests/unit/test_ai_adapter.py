@@ -1,4 +1,3 @@
-import pytest
 
 from src.business.ai_adapter.context_compressor import ContextCompressor
 

@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-from decimal import Decimal
-from typing import Callable
-
 from src.core.account.manager import AccountManager
-from src.core.constants import D, ZERO, A_STOCK_LOT_SIZE, CRYPTO_QUANTITY_PRECISION
-from src.core.enums import Action, Market, MarketStatus, PriceLimitStatus, Currency
+from src.core.constants import A_STOCK_LOT_SIZE, ZERO, D
+from src.core.enums import Action, Currency, Market, MarketStatus, PriceLimitStatus
 from src.core.trade_validator.models import TradeOrder, ValidationResult
 
 
@@ -66,14 +63,17 @@ class TradeValidator:
             lot_size = A_STOCK_LOT_SIZE
             adjusted = (int(order.quantity / lot_size)) * lot_size
             if adjusted <= 0:
-                return ValidationResult(is_valid=False, reason=f"Quantity {order.quantity} below A-stock lot size {lot_size}")
+                return ValidationResult(
+                is_valid=False,
+                reason=f"Quantity {order.quantity} below A-stock lot size {lot_size}",
+            )
             return ValidationResult(is_valid=True, adjusted_quantity=D(adjusted))
-        elif market == Market.US_STOCK.value:
+        if market == Market.US_STOCK.value:
             adjusted = int(order.quantity)
             if adjusted <= 0:
                 return ValidationResult(is_valid=False, reason="Quantity below US-stock minimum 1")
             return ValidationResult(is_valid=True, adjusted_quantity=D(adjusted))
-        elif market == Market.CRYPTO.value:
+        if market == Market.CRYPTO.value:
             quantize_str = D(10) ** (-precision)
             adjusted = order.quantity.quantize(quantize_str)
             if adjusted < min_qty:
@@ -108,7 +108,10 @@ class TradeValidator:
         balance = self._account_mgr.get_balance(order.ai_player_id, currency)
         estimated_cost = order.quantity * order.price * D("1.002")
         if balance < estimated_cost:
-            return ValidationResult(is_valid=False, reason=f"Insufficient {currency.value} balance: {balance} < {estimated_cost}")
+            return ValidationResult(
+            is_valid=False,
+            reason=f"Insufficient {currency.value} balance: {balance} < {estimated_cost}",
+        )
         return ValidationResult(is_valid=True)
 
     def validate_holding(self, order: TradeOrder) -> ValidationResult:

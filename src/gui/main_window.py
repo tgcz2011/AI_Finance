@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import sys
-import asyncio
 import logging
+import sys
+import typing
 
 logger = logging.getLogger(__name__)
 
 
 class MainWindow:
-    NAV_ITEMS = [
+    NAV_ITEMS: typing.ClassVar[list[str]] = [
         "主控制", "竞赛控制", "排行榜", "资产曲线",
         "交易记录", "AI绩效", "模块管理", "配置编辑",
     ]
@@ -41,7 +41,7 @@ def run_gui():
         from src.gui.bridge import GUIBackendBridge
         bus = EventBus()
         bridge = GUIBackendBridge(bus)
-        window = MainWindow(bridge)
+        MainWindow(bridge)
         logger.info("GUI application started")
         sys.exit(app.exec())
     except ImportError:

@@ -6,7 +6,7 @@ from pathlib import Path
 import yaml
 from pydantic import ValidationError
 
-from src.core.types.result import Ok, Err, Result
+from src.core.types.result import Err, Ok, Result
 from src.infrastructure.config.models import SystemConfig
 
 
@@ -28,7 +28,7 @@ class ConfigManager:
         config_path = path or self._config_path
         try:
             if config_path.exists():
-                with open(config_path, "r", encoding="utf-8") as f:
+                with open(config_path, encoding="utf-8") as f:
                     raw = yaml.safe_load(f) or {}
             else:
                 raw = {}

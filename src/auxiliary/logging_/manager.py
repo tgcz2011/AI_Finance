@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import logging
-import re
 from datetime import datetime
 from typing import Any
 
 from src.core.enums import AlertLevel
-from src.core.types.event_bus import EventBus, Event
+from src.core.types.event_bus import Event, EventBus
+
+MASK_THRESHOLD = 8
+MASK_PREFIX_LEN = 4
+MASK_SUFFIX_LEN = 4
 
 logger = logging.getLogger(__name__)
 
@@ -18,29 +21,55 @@ class LogManager:
 
     @staticmethod
     def mask_sensitive(value: str) -> str:
-        if not value or len(value) <= 8:
+        if not value or len(value) <= MASK_THRESHOLD:
             return "***"
-        return value[:4] + "***" + value[-4:]
+        return value[:MASK_PREFIX_LEN] + "***" + value[-MASK_SUFFIX_LEN:]
 
-    def log_decision_request(self, ai_player_id: str, decisions: Any) -> None:
-        self._append("DECISION_REQUEST", f"AI {ai_player_id} decisions", {"ai_player_id": ai_player_id})
+    def log_decision_request(self, ai_player_id: str, _decisions: Any) -> None:
+        self._append(
+            "DECISION_REQUEST",
+            f"AI {ai_player_id} decisions",
+            {"ai_player_id": ai_player_id},
+        )
 
     def log_interception(self, ai_player_id: str, symbol: str, reason: str) -> None:
-        self._append("INTERCEPTION", f"AI {ai_player_id} symbol {symbol}: {reason}", {"ai_player_id": ai_player_id, "symbol": symbol, "reason": reason})
+        self._append(
+            "INTERCEPTION",
+            f"AI {ai_player_id} symbol {symbol}: {reason}",
+            {"ai_player_id": ai_player_id, "symbol": symbol, "reason": reason},
+        )
 
-    def log_trade_execution(self, account_id: str, symbol: str, action: str, quantity: Any, price: Any) -> None:
-        self._append("TRADE_EXECUTION", f"{action} {quantity} {symbol} @ {price}", {"account_id": account_id, "symbol": symbol})
+    def log_trade_execution(
+        self, account_id: str, symbol: str, action: str, quantity: Any, price: Any,
+    ) -> None:
+        self._append(
+            "TRADE_EXECUTION",
+            f"{action} {quantity} {symbol} @ {price}",
+            {"account_id": account_id, "symbol": symbol},
+        )
 
     def log_interest(self, account_id: str, amount: Any) -> None:
-        self._append("INTEREST", f"Interest {amount} for {account_id}", {"account_id": account_id})
+        self._append(
+            "INTEREST", f"Interest {amount} for {account_id}", {"account_id": account_id},
+        )
 
     def log_exchange(self, account_id: str, from_c: str, to_c: str, amount: Any) -> None:
-        self._append("EXCHANGE", f"Exchange {amount} {from_c}->{to_c}", {"account_id": account_id})
+        self._append(
+            "EXCHANGE",
+            f"Exchange {amount} {from_c}->{to_c}",
+            {"account_id": account_id},
+        )
 
     def log_risk_event(self, ai_player_id: str, rule: str, details: str) -> None:
-        self._append("RISK_EVENT", f"Risk {rule}: {details}", {"ai_player_id": ai_player_id, "rule": rule}, AlertLevel.WARNING)
+        self._append(
+            "RISK_EVENT", f"Risk {rule}: {details}",
+            {"ai_player_id": ai_player_id, "rule": rule}, AlertLevel.WARNING,
+        )
 
-    def _append(self, category: str, message: str, details: dict | None = None, level: AlertLevel = AlertLevel.INFO) -> None:
+    def _append(
+        self, category: str, message: str,
+        details: dict | None = None, level: AlertLevel = AlertLevel.INFO,
+    ) -> None:
         entry = {
             "timestamp": datetime.now().isoformat(),
             "level": level.value,

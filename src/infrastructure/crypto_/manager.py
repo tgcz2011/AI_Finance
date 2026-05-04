@@ -48,7 +48,6 @@ class CryptoManager:
             raise ValueError(f"Decryption failed: {e}") from e
 
     def rotate_key(self) -> None:
-        old_fernet = self._fernet
         new_key = Fernet.generate_key()
         self._key_path.write_bytes(new_key)
         self._key_path.chmod(0o600)

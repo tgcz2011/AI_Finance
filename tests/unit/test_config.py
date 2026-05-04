@@ -1,10 +1,9 @@
 from decimal import Decimal
-from pathlib import Path
 
 import pytest
 
-from src.infrastructure.config.models import SystemConfig, FeeConfig, LoanConfig
 from src.infrastructure.config.manager import ConfigManager
+from src.infrastructure.config.models import FeeConfig, LoanConfig, SystemConfig
 
 
 class TestConfigModels:
@@ -24,15 +23,15 @@ class TestConfigModels:
         assert loan.collateral_liquidation_ratio < loan.collateral_warning_ratio
 
     def test_invalid_simulation_mode(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             SystemConfig(simulation_mode="INVALID")
 
     def test_exchange_fee_max_lt_min_invalid(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             FeeConfig(exchange_fee_min_bps=Decimal("0.005"), exchange_fee_max_bps=Decimal("0.001"))
 
     def test_liquidation_gte_warning_invalid(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             LoanConfig(
                 collateral_warning_ratio=Decimal("1.1"),
                 collateral_liquidation_ratio=Decimal("1.2"),

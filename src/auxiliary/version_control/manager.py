@@ -1,17 +1,17 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import logging
 from pathlib import Path
-from typing import Any
 
-from src.core.types.result import Ok, Err, Result
+from src.core.types.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 
 
 class VersionManager:
-    def __init__(self, repo_path: Path = Path(".")) -> None:
+    def __init__(self, repo_path: Path = Path()) -> None:
         self._repo_path = repo_path
         self._enabled = False
         self._github_token: str | None = None
@@ -44,10 +44,8 @@ class VersionManager:
 
     def _do_commit(self, message: str) -> None:
         self._git.git.add(A=True)
-        try:
+        with contextlib.suppress(Exception):
             self._git.index.commit(message)
-        except Exception:
-            pass
 
     async def push_to_remote(self) -> Result[None]:
         if not self._enabled or not self._auto_push:

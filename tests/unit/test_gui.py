@@ -1,4 +1,5 @@
 import pytest
+
 from src.core.types.event_bus import EventBus
 from src.gui.bridge import GUIBackendBridge
 from src.gui.main_window import MainWindow

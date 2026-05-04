@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from decimal import Decimal
-from typing import Any, Generic, Sequence, TypeVar
+from collections.abc import Sequence
+from typing import Any, Generic, TypeVar
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession

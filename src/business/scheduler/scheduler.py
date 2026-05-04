@@ -3,19 +3,18 @@ from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
-from src.core.account.manager import AccountManager
-from src.core.account.models import AccountSummary
-from src.core.enums import Action, Market, SimulationMode, Currency
-from src.core.constants import D, ZERO, AI_DECISION_TIMEOUT_SECONDS, DECISION_CYCLE_TIMEOUT_SECONDS
-from src.core.trade_validator.validator import TradeValidator
-from src.core.trade_validator.models import TradeOrder
-from src.core.risk.engine import RiskEngine
 from src.business.loan.manager import LoanManager
-from src.core.types.event_bus import EventBus, Event
+from src.core.account.manager import AccountManager
+from src.core.constants import AI_DECISION_TIMEOUT_SECONDS, ZERO, D
+from src.core.enums import Action, Market, SimulationMode
+from src.core.risk.engine import RiskEngine
+from src.core.trade_validator.models import TradeOrder
+from src.core.trade_validator.validator import TradeValidator
+from src.core.types.event_bus import EventBus
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +103,7 @@ class SimulatorScheduler:
                 callback(ai_player_id, summary, market_data),
                 timeout=AI_DECISION_TIMEOUT_SECONDS,
             )
-        except asyncio.TimeoutError:
+        except TimeoutError:
             return result
         except Exception as e:
             result.errors.append(str(e))
@@ -147,9 +146,9 @@ class SimulatorScheduler:
             price = market_prices.get(trigger["symbol"])
             if price is None:
                 continue
-            if trigger["direction"] == "above" and price > trigger["threshold"]:
-                triggered.append(trigger["symbol"])
-            elif trigger["direction"] == "below" and price < trigger["threshold"]:
+            above_hit = trigger["direction"] == "above" and price > trigger["threshold"]
+            below_hit = trigger["direction"] == "below" and price < trigger["threshold"]
+            if above_hit or below_hit:
                 triggered.append(trigger["symbol"])
         return triggered
 

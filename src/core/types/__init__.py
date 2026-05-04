@@ -1,4 +1,4 @@
-from src.core.types.result import Result, Ok, Err
-from src.core.types.event_bus import EventBus, Event
+from src.core.types.event_bus import Event, EventBus
+from src.core.types.result import Err, Ok, Result
 
-__all__ = ["Result", "Ok", "Err", "EventBus", "Event"]
+__all__ = ["Err", "Event", "EventBus", "Ok", "Result"]

@@ -3,12 +3,14 @@ from __future__ import annotations
 from decimal import Decimal
 
 from src.core.account.models import AccountSummary
-from src.core.constants import D, ZERO
-from src.core.risk.rules.base import RiskRule, RiskCheckResult
+from src.core.constants import ZERO, D
+from src.core.risk.rules.base import RiskCheckResult, RiskRule
+
+_DAILY_LOSS_DEFAULT_RATIO = D("0.05")
 
 
 class DailyLossLimit(RiskRule):
-    def __init__(self, ratio: Decimal = D("0.05"), initial_assets: Decimal = ZERO) -> None:
+    def __init__(self, ratio: Decimal = _DAILY_LOSS_DEFAULT_RATIO, initial_assets: Decimal = ZERO) -> None:
         self._ratio = ratio
         self._initial_assets = initial_assets
 

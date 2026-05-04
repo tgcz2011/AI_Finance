@@ -1,13 +1,10 @@
-from decimal import Decimal
 
-import pytest
 
-from src.core.account.manager import AccountManager
-from src.core.constants import D, ZERO, INITIAL_CAPITAL_CNY
-from src.core.enums import Currency, Market
-from src.core.trade_executor.fee_calculator import FeeCalculator, SlippageCalculator, FeeDetail
-from src.core.enums import Action
 from src.business.loan.manager import LoanManager
+from src.core.account.manager import AccountManager
+from src.core.constants import INITIAL_CAPITAL_CNY, ZERO, D
+from src.core.enums import Action, Currency, Market
+from src.core.trade_executor.fee_calculator import FeeCalculator, SlippageCalculator
 
 
 class TestFeeCalculator:
@@ -72,12 +69,12 @@ class TestLoanManager:
         assert acct.get_balance("ai_001", Currency.CNY) == INITIAL_CAPITAL_CNY + D("100000")
 
     def test_loan_increases_debt(self):
-        acct, loan_mgr = self._setup()
+        _acct, loan_mgr = self._setup()
         loan_mgr.disburse("ai_001", D("100000"))
         assert loan_mgr.get_total_debt("ai_001") == D("100000")
 
     def test_daily_interest_compound(self):
-        acct, loan_mgr = self._setup()
+        _acct, loan_mgr = self._setup()
         loan_mgr.disburse("ai_001", D("100000"))
         result = loan_mgr.apply_daily_interest("ai_001")
         assert result.is_ok
@@ -86,19 +83,19 @@ class TestLoanManager:
         assert debt > D("100000")
 
     def test_collateral_ratio_ok(self):
-        acct, loan_mgr = self._setup()
+        _acct, loan_mgr = self._setup()
         loan_mgr.disburse("ai_001", D("100000"))
         ratio = loan_mgr.get_collateral_ratio("ai_001", INITIAL_CAPITAL_CNY + D("100000"))
         assert ratio > ZERO
 
     def test_check_collateral(self):
-        acct, loan_mgr = self._setup()
+        _acct, loan_mgr = self._setup()
         loan_mgr.disburse("ai_001", D("100000"))
         status = loan_mgr.check_collateral("ai_001", INITIAL_CAPITAL_CNY + D("100000"))
         assert status == "OK"
 
     def test_repay_loan(self):
-        acct, loan_mgr = self._setup()
+        _acct, loan_mgr = self._setup()
         loan_mgr.disburse("ai_001", D("100000"))
         loan_mgr.apply_daily_interest("ai_001")
         result = loan_mgr.repay("ai_001", D("100050"))
@@ -114,7 +111,7 @@ class TestLoanManager:
         assert result.value > ZERO
 
     def test_auto_loan_not_needed(self):
-        acct, loan_mgr = self._setup()
+        _acct, loan_mgr = self._setup()
         result = loan_mgr.check_auto_loan("ai_001", D("100000"))
         assert result.is_ok
         assert result.value == ZERO

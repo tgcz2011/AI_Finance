@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-import json
 import csv
-import io
+import json
 from decimal import Decimal
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from src.core.constants import D, ZERO
+from src.core.constants import ZERO, D
 
 
 class ReportGenerator:
@@ -47,11 +45,9 @@ class ReportGenerator:
         cumulative = D("1")
         for ret in daily_returns:
             cumulative *= (D("1") + ret)
-            if cumulative > peak:
-                peak = cumulative
+            peak = max(peak, cumulative)
             dd = (peak - cumulative) / peak if peak > ZERO else ZERO
-            if dd > max_dd:
-                max_dd = dd
+            max_dd = max(max_dd, dd)
         return max_dd
 
     @staticmethod
@@ -63,7 +59,6 @@ class ReportGenerator:
         variance = sum((r - avg) ** 2 for r in daily_returns) / (len(daily_returns) - 1)
         if variance <= ZERO:
             return ZERO
-        from decimal import Decimal as Dec
         std = variance.sqrt()
         return (excess / std) * D("252").sqrt() if std > ZERO else ZERO
 
@@ -87,7 +82,7 @@ class ReportGenerator:
         html = f"<!DOCTYPE html><html><head><title>{title}</title></head><body><h1>{title}</h1>"
         if data:
             html += "<table border='1'><tr>"
-            for key in data[0].keys():
+            for key in data[0]:
                 html += f"<th>{key}</th>"
             html += "</tr>"
             for row in data:

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from src.core.types.event_bus import EventBus, Event
-from src.core.enums import AlertLevel
+from src.core.types.event_bus import Event, EventBus
 
 
 class StateIntegrityChecker:
@@ -13,7 +12,7 @@ class StateIntegrityChecker:
     def check_balance_integrity(self, accounts: list, positions: list, loans: list) -> bool:
         total_cash = sum(a.balance for a in accounts)
         total_position_value = sum(p.quantity * p.cost_price for p in positions)
-        total_debt = sum(l.principal + l.interest_accrued for l in loans if l.is_active)
+        total_debt = sum(ln.principal + ln.interest_accrued for ln in loans if ln.is_active)
         net_assets = total_cash + total_position_value - total_debt
         passed = net_assets >= 0
         if not passed:

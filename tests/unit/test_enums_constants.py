@@ -1,12 +1,22 @@
 import decimal
-from src.core.enums import (
-    Currency, Market, Action, SimulationMode, WALStatus,
-    OperationType, RiskRuleType, ModuleStatus, MarketStatus,
-    PriceLimitStatus, ContestRoundType, AlertLevel,
-)
+
 from src.core.constants import (
-    D, ZERO, ONE, HUNDRED, INITIAL_CAPITAL_CNY,
-    A_STOCK_LOT_SIZE, DECIMAL_PRECISION, CONTEXT_MAX_TOKENS,
+    A_STOCK_LOT_SIZE,
+    DECIMAL_PRECISION,
+    HUNDRED,
+    INITIAL_CAPITAL_CNY,
+    ONE,
+    ZERO,
+    D,
+)
+from src.core.enums import (
+    Action,
+    Currency,
+    Market,
+    ModuleStatus,
+    RiskRuleType,
+    SimulationMode,
+    WALStatus,
 )
 
 
@@ -61,12 +71,12 @@ class TestConstants:
         assert val == decimal.Decimal("123.456")
 
     def test_zero_one_hundred(self):
-        assert ZERO == D("0")
-        assert ONE == D("1")
-        assert HUNDRED == D("100")
+        assert D("0") == ZERO
+        assert D("1") == ONE
+        assert D("100") == HUNDRED
 
     def test_initial_capital(self):
-        assert INITIAL_CAPITAL_CNY == D("1000000")
+        assert D("1000000") == INITIAL_CAPITAL_CNY
 
     def test_a_stock_lot_size(self):
         assert A_STOCK_LOT_SIZE == 100

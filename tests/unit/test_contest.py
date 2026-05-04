@@ -1,12 +1,8 @@
-import pytest
-from datetime import datetime
-from decimal import Decimal
-from pathlib import Path
 
+from src.business.contest.manager import ContestManager
 from src.core.account.manager import AccountManager
-from src.core.constants import D, ZERO, INITIAL_CAPITAL_CNY
-from src.core.enums import Currency, ContestRoundType
-from src.business.contest.manager import ContestManager, LeaderboardEntry
+from src.core.constants import INITIAL_CAPITAL_CNY, D
+from src.core.enums import ContestRoundType, Currency
 
 
 class TestContestManager:
@@ -16,13 +12,13 @@ class TestContestManager:
         return acct, mgr
 
     def test_create_contest(self):
-        acct, mgr = self._setup()
+        _acct, mgr = self._setup()
         result = mgr.create_contest(["ai_001", "ai_002"], INITIAL_CAPITAL_CNY)
         assert result.is_ok
         assert len(mgr.participants) == 2
 
     def test_start_stop_contest(self):
-        acct, mgr = self._setup()
+        _acct, mgr = self._setup()
         mgr.create_contest(["ai_001"])
         start = mgr.start_contest()
         assert start.is_ok
@@ -40,7 +36,7 @@ class TestContestManager:
         assert leaderboard[0].rank == 1
 
     def test_advance_round_points(self):
-        acct, mgr = self._setup()
+        _acct, mgr = self._setup()
         mgr.create_contest(["ai_001", "ai_002"], D("1000000"), round_type=ContestRoundType.POINTS)
         mgr.start_contest()
         result = mgr.advance_round()
@@ -49,7 +45,7 @@ class TestContestManager:
         assert len(mgr.points) > 0
 
     def test_advance_round_elimination(self):
-        acct, mgr = self._setup()
+        _acct, mgr = self._setup()
         mgr.create_contest(["ai_001", "ai_002", "ai_003"], D("1000000"), round_type=ContestRoundType.ELIMINATION)
         mgr.start_contest()
         result = mgr.advance_round(elimination_ratio=D("0.33"))
@@ -57,12 +53,12 @@ class TestContestManager:
         assert len(mgr.eliminated) > 0
 
     def test_contest_not_active_cannot_advance(self):
-        acct, mgr = self._setup()
+        _acct, mgr = self._setup()
         result = mgr.advance_round()
         assert result.is_err
 
     def test_duplicate_create_fails(self):
-        acct, mgr = self._setup()
+        _acct, mgr = self._setup()
         mgr.create_contest(["ai_001"])
         result = mgr.create_contest(["ai_002"])
         assert result.is_err

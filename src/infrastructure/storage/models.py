@@ -4,10 +4,18 @@ from datetime import datetime
 from decimal import Decimal
 
 from sqlalchemy import (
-    Boolean, CheckConstraint, DateTime, ForeignKey, Index,
-    Integer, Numeric, String, Text, UniqueConstraint,
+    Boolean,
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    Numeric,
+    String,
+    Text,
+    UniqueConstraint,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):

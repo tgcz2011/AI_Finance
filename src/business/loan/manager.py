@@ -1,17 +1,19 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from datetime import datetime
 
 from src.core.account.manager import AccountManager
 from src.core.account.models import Loan
 from src.core.constants import (
-    D, ZERO,
-    DEFAULT_DAILY_INTEREST_RATE, DEFAULT_MAX_LOAN_RATIO,
-    DEFAULT_COLLATERAL_WARNING_RATIO, DEFAULT_COLLATERAL_LIQUIDATION_RATIO,
+    DEFAULT_COLLATERAL_LIQUIDATION_RATIO,
+    DEFAULT_COLLATERAL_WARNING_RATIO,
+    DEFAULT_DAILY_INTEREST_RATE,
+    DEFAULT_MAX_LOAN_RATIO,
+    ZERO,
+    D,
 )
 from src.core.enums import Currency
-from src.core.types.result import Ok, Err, Result
+from src.core.types.result import Err, Ok, Result
 
 
 class LoanManager:
@@ -139,10 +141,10 @@ class LoanManager:
 
     def _get_total_debt(self, ai_player_id: str) -> Decimal:
         loans = self._loans.get(ai_player_id, [])
-        return sum((l.principal + l.interest_accrued) for l in loans if l.is_active)
+        return sum((ln.principal + ln.interest_accrued) for ln in loans if ln.is_active)
 
     def get_total_debt(self, ai_player_id: str) -> Decimal:
         return self._get_total_debt(ai_player_id)
 
     def get_active_loans(self, ai_player_id: str) -> list[Loan]:
-        return [l for l in self._loans.get(ai_player_id, []) if l.is_active]
+        return [ln for ln in self._loans.get(ai_player_id, []) if ln.is_active]

@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-from decimal import Decimal
-from typing import Callable
-
 from src.core.account.models import AccountSummary
-from src.core.risk.rules import RiskRule, RiskCheckResult
-from src.core.types.event_bus import EventBus, Event
+from src.core.risk.rules import RiskCheckResult, RiskRule
+from src.core.types.event_bus import Event, EventBus
 
 
 class RiskEngine:

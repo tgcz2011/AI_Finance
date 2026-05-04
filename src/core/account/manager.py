@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Any
 
-from src.core.account.models import Account, Position, AccountSummary
-from src.core.constants import D, ZERO, DEFAULT_SPREAD_BPS
+from src.core.account.models import Account, AccountSummary, Position
+from src.core.constants import DEFAULT_SPREAD_BPS, ZERO, D
 from src.core.enums import Currency, Market
-from src.core.types.result import Ok, Err, Result
+from src.core.types.result import Err, Ok, Result
 
 
 class AccountManager:
@@ -237,7 +236,8 @@ class AccountManager:
                 price = market_prices.get(pos.symbol, pos.cost_price)
                 position_value_cny = pos.quantity * price
                 if pos.market != Market.A_STOCK:
-                    rate_key = (Currency.USD.value if pos.market == Market.US_STOCK else Currency.USDT.value, Currency.CNY.value)
+                    src = Currency.USD.value if pos.market == Market.US_STOCK else Currency.USDT.value
+                    rate_key = (src, Currency.CNY.value)
                     rates = self._exchange_rates.get(rate_key)
                     if rates:
                         position_value_cny = position_value_cny * rates["buy_rate"]

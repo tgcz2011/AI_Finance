@@ -1,18 +1,12 @@
 from __future__ import annotations
 
-import asyncio
 import logging
-import signal
 import sys
 from pathlib import Path
 
-from src.core.types.event_bus import EventBus
-from src.core.wal.recovery import SystemRecovery
-from src.infrastructure.config.manager import ConfigManager
-from src.infrastructure.module_manager.registry import ModuleRegistry, register_all_modules
-
 
 def setup_logging() -> None:
+    Path("data").mkdir(exist_ok=True)
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -28,7 +22,10 @@ def main() -> None:
     logger = logging.getLogger(__name__)
     logger.info("AI Finance Simulator starting...")
 
-    Path("data").mkdir(exist_ok=True)
+    from src.core.types.event_bus import EventBus
+    from src.core.wal.recovery import SystemRecovery
+    from src.infrastructure.config.manager import ConfigManager
+    from src.infrastructure.module_manager.registry import ModuleRegistry, register_all_modules
 
     config_mgr = ConfigManager()
     config_result = config_mgr.load()
@@ -39,7 +36,7 @@ def main() -> None:
     registry = ModuleRegistry()
     register_all_modules(registry)
 
-    event_bus = EventBus()
+    EventBus()
     recovery = SystemRecovery()
     recovery.setup_signal_handlers()
 
@@ -48,6 +45,7 @@ def main() -> None:
         run_gui()
     except ImportError:
         logger.error("PyQt6 not available, cannot start GUI")
+        logger.info("Install PyQt6: pip install PyQt6 qasync")
         sys.exit(1)
 
 

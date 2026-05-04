@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-import asyncio
+import contextlib
 import inspect
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
-from src.core.types.event_bus import EventBus, Event
+from src.core.types.event_bus import Event, EventBus
 
 
 class GUIBackendBridge:
@@ -31,10 +32,8 @@ class GUIBackendBridge:
 
     def _dispatch(self, channel: str, event: Event) -> None:
         for callback in self._realtime_subscribers.get(channel, []):
-            try:
+            with contextlib.suppress(Exception):
                 callback(event.payload)
-            except Exception:
-                pass
 
     @property
     def is_backend_ready(self) -> bool:

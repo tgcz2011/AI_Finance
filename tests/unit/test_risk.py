@@ -1,19 +1,21 @@
 from decimal import Decimal
 
-import pytest
-
-from src.core.account.models import AccountSummary, Position
-from src.core.constants import D, ZERO
-from src.core.enums import Market
-from src.core.risk.rules import (
-    DrawdownCircuitBreaker, ConcentrationLimit, DailyLossLimit,
-    AbnormalFrequencyDetector, ExtremeMarketCircuitBreaker, RiskCheckResult,
-)
+from src.core.account.models import AccountSummary
+from src.core.constants import D
 from src.core.risk.engine import RiskEngine
+from src.core.risk.rules import (
+    AbnormalFrequencyDetector,
+    ConcentrationLimit,
+    DailyLossLimit,
+    DrawdownCircuitBreaker,
+    ExtremeMarketCircuitBreaker,
+)
 from src.core.types.event_bus import EventBus
 
+_DEFAULT_ASSETS = D("1000000")
 
-def _make_summary(total_assets: Decimal = D("1000000")) -> AccountSummary:
+
+def _make_summary(total_assets: Decimal = _DEFAULT_ASSETS) -> AccountSummary:
     return AccountSummary(ai_player_id="ai_001", total_assets_cny=total_assets)
 
 

@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from decimal import Decimal
 from datetime import datetime
-from typing import Any
+from decimal import Decimal
 
-from src.core.constants import D, ZERO
+from src.core.constants import ZERO
 
 
 @dataclass(frozen=True)
@@ -42,7 +41,7 @@ class MarketDataSource(ABC):
 
     async def health_check(self) -> bool:
         try:
-            quotes = await self.fetch_quotes([])
+            await self.fetch_quotes([])
             return True
         except Exception:
             return False
