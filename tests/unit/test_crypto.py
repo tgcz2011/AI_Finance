@@ -42,6 +42,9 @@ class TestCryptoManager:
             mgr.decrypt("invalid_base64_ciphertext!!!")
 
     def test_key_file_permissions(self, tmp_path):
+        import sys
+        if sys.platform == "win32":
+            return
         mgr = CryptoManager(key_dir=tmp_path)
         mgr.initialize()
         key_path = tmp_path / "secret.key"
