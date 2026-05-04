@@ -38,8 +38,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
+      - name: Install EGL (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libopengl0
       - run: pip install -e ".[dev]"
-      - run: pytest tests/unit -v --cov=src --cov-report=term-missing --cov-report=xml -p no:qt
+      - run: pytest tests/unit -v --cov=src --cov-report=term-missing --cov-report=xml
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -55,8 +58,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - run: sudo apt-get update && sudo apt-get install -y libegl1 libopengl0
       - run: pip install -e ".[dev]"
-      - run: pytest tests/integration -v -p no:qt
+      - run: pytest tests/integration -v
 
   coverage-gate:
     name: Coverage Gate (≥80%)
@@ -67,5 +71,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - run: sudo apt-get update && sudo apt-get install -y libegl1 libopengl0
       - run: pip install -e ".[dev]"
-      - run: pytest tests/unit --cov=src --cov-report=term-missing --cov-fail-under=80 -q -p no:qt
+      - run: pytest tests/unit --cov=src --cov-report=term-missing --cov-fail-under=80 -q
